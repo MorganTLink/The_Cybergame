@@ -9,7 +9,6 @@ public class CubeBehavior : MonoBehaviour
 	public NodeController.SecurityClass color;
 	
 	public GameObject[] influences;
-	public Malware[] infections;	
 	
 	private GameObject[] adjacent;
 	
@@ -49,12 +48,6 @@ public class CubeBehavior : MonoBehaviour
 		
 		foreach(GameObject go in influences)
 			cmdNodes.Add(go.GetComponent(typeof(BaseCubeGenerator)) as BaseCubeGenerator);	
-		
-		foreach(Malware infection in infections)
-			malware.Add(infection);
-		
-		if(malware.Count > 0)
-			isInfected = true;
 		
 		currentColor = blue;
 		color = NodeController.SecurityClass.BLUE;
@@ -185,26 +178,8 @@ public class CubeBehavior : MonoBehaviour
 		Redraw();
 	}
 	
-	public void infect(Malware newInfection)
-	{
-		malware.Add(newInfection);
-		this.Redraw();
-	}
-	
 	public void disinfect()
-	{
-		foreach(Malware infection in malware)
-		{
-			int rng = Random.Range(0, 1);
-			
-			if(this.color == NodeController.SecurityClass.RED || this.color == NodeController.SecurityClass.GREEN)
-			{
-				if(rng >= naturalDisinfectChance)
-				{
-					malware.Remove(infection);	
-				}
-			}
-		}		
+	{		
 	}
 	
 	public BaseCubeGenerator[] myInfluences()

@@ -1,8 +1,9 @@
 ﻿<Properties>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\CyberspaceHacker Assets\Scripts\NetworkMasterScript.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\CyberspaceHacker Assets\Scripts\Gameplay Scripts\ConsoleController.cs">
     <Files>
-      <File FileName="Assets\CyberspaceHacker Assets\Scripts\NetworkMasterScript.cs" Line="1" Column="1" />
+      <File FileName="Assets\CyberspaceHacker Assets\Scripts\Gameplay Scripts\ConsoleController.cs" Line="70" Column="1" />
+      <File FileName="Assets\CyberspaceHacker Assets\Scripts\GUI Scripts\GUIConsole.cs" Line="1" Column="1" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>

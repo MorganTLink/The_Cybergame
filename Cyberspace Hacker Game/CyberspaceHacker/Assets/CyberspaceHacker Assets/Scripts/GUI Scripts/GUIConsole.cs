@@ -2,9 +2,11 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
-public class GUIConsole : GUIEvent 
+public class GUIConsole : MonoBehaviour 
 {
 		
+	public ConsoleController console;
+	
 	public string inputCmd = "";
 	
 	public float waitTime = 0.01f;
@@ -16,63 +18,51 @@ public class GUIConsole : GUIEvent
 	public float cmdSpacer = 14f;
 	public float cmdSize = 21f;
 	public float screenLocH = 0.255f;
-	public float cmdOffset = 8f;
+	public float cmdAppOffset = 8f;
+	public float cmdLocalOffset = 35f;
 	
 	private int maxLines = 16;
 	private float hSize = Screen.width;
 	private float hPos = 1f;
 	private float vPos = 400f;
 	private float vSize = 275f;
-	
-	private bool consoleOn = false;
-	private bool consoleWait = true;
-	private bool consoleFreeze = true;
-	private bool localConsole = false;
+
 	
 	private string consoleText;
 	private float timer;
-	
-	public enum Commands
-	{
-		Void,
-		Unknown,
-		DontPrint,
-		_Check,
-		Activate,
-		Deactivate,
-		Exit,
-		Dir,
-		Scan,
-		RunNet 
-	}
-	
+
 	private string consoleInput;	
 	private List<string> consolePast;
-	private Queue<KeyValuePair<string, Commands>> consoleOut;
-
-	//---------------------------------------------------------------------------------------------------------------------------------------------------
+	private Queue<KeyValuePair<string, ConsoleController.Commands>> consoleOut;
 	
-	private Dictionary<Commands, List<string>> commandList;
+
+
+	public void EnterCommand(string text)
+	{
+		ConsoleController.Commands cmd;
+		if(console.consoleOn)
+			cmd = ConsoleController.Commands._Check;
+		else
+			cmd = ConsoleController.Commands.Void;
+			
+		consoleOut.Enqueue(new KeyValuePair<string, ConsoleController.Commands>(text, cmd));
+		if(console.consoleOn)
+			consoleInput = text;
+	}
+	
+	public void EnterCommand(string text, ConsoleController.Commands cmd)
+	{
+		consoleOut.Enqueue(new KeyValuePair<string, ConsoleController.Commands>(text, cmd));	
+		if(console.consoleOn)
+			consoleInput = text;
+	}
 	
 		// Use this for initialization
-	public override void Start () 
+	public void Start () 
 	{
 		consolePast = new List<string>();
-		consoleOut = new Queue<KeyValuePair<string, Commands>>();
-		
+		consoleOut = new Queue<KeyValuePair<string, ConsoleController.Commands>>();
 
-		
-		commandList = new Dictionary<Commands, List<string>>();
-		
-		//EXIT
-		List<string> cmd_Exit = new List<string>();
-		cmd_Exit.Add ("exit"); cmd_Exit.Add ("quit"); cmd_Exit.Add ("shutdown"); cmd_Exit.Add("camp"); cmd_Exit.Add ("kill");
-		commandList.Add (Commands.Exit, cmd_Exit);
-		
-		//DIR
-		List<string> cmd_Dir = new List<string>();
-		cmd_Dir.Add ("dir");
-		commandList.Add (Commands.Dir, cmd_Dir);
 		
 		EnterCommand ("Anix Kernel 2.0.1.74,  Update Pak III");										//01
 		EnterCommand ("Initilizing linknet IP sockets");											//02
@@ -144,79 +134,11 @@ public class GUIConsole : GUIEvent
 		EnterCommand("\tconnecting to IP 2013:0f8d:a133:100f:0817:3c19:87e2:1337");
 		EnterCommand("\tconnection completed, ping time: 12 ms");
 	
-		EnterCommand("", Commands.Activate);
-		consoleFreeze = false;
-		
-		base.Start();
+		EnterCommand("", ConsoleController.Commands.Activate);
+		console.consoleFreeze = false;
 	}
-	
-	
-	public void EnterCommand(string text)
-	{
-		Commands cmd;
-		if(consoleOn)
-			cmd = Commands._Check;
-		else
-			cmd = Commands.Void;
-			
-		consoleOut.Enqueue(new KeyValuePair<string, Commands>(text, cmd));
-		if(consoleOn)
-			consoleInput = text;	
-	}
-	
-	public void EnterCommand(string text, Commands cmd)
-	{
-		consoleOut.Enqueue(new KeyValuePair<string, Commands>(text, cmd));
-		if(consoleOn)
-			consoleInput = text;	
-		
-	}
-	
-	public void activateCommand(Commands cmd, string text)
-	{
-		string origText = text;
-		string[] parts = text.Split('>');
-		text = parts[1];
-		
-		if(cmd != Commands.Void && cmd != Commands.Unknown)
-		{
-			if(cmd == Commands.Exit)
-			{
-				if(localConsole)
-				{
-					EnterCommand ("ANIX Shell shutting down... ", Commands.Void);
-					EnterCommand("Shutting down system, logging record at NULL:NULL", Commands.Exit);
-				}
-				else
-					EnterCommand ("\tShutting down scanner: LinkNet Version NULL, Netpack jollyRoger", Commands.Exit);
-			}
-			
-		}
-		else if(cmd == Commands.Unknown)
-		{
-			EnterCommand("\tUnknown Command \"" + text + "\"", Commands.Void);
-		}
-	}
-	
-	private Commands validateCommand(string text)
-	{
-		string origText = text;
-		string[] parts = text.Split('>');
-		text = parts[1];
-		string textNormal = text.ToLower();
-		
-		foreach(KeyValuePair<Commands, List<string>> kvp in commandList)
-		{			
-			if(kvp.Value.Contains(textNormal) || kvp.Value.Contains(text))
-			{
-				return kvp.Key;
-			}
-		}
 
-		return Commands.Unknown;
-		
-	}
-	
+
 	public void displayConsole()
 	{			
 		int limit;	
@@ -257,7 +179,7 @@ public class GUIConsole : GUIEvent
 	
 	void OnGUI()
 	{
-		
+		float cmdOffset;
 		bool enterPressed = false;
 		
 		if(Event.current.type == EventType.KeyDown && Event.current.keyCode == KeyCode.Return)
@@ -274,7 +196,7 @@ public class GUIConsole : GUIEvent
 
 		GUI.Label(new Rect(hPos, vPos, hSize, vSize), consoleText);
 		
-		if(consoleOn && !consoleWait)
+		if(console.consoleOn && !console.consoleWait)
 		{
 						
 			if (enterPressed)
@@ -284,7 +206,19 @@ public class GUIConsole : GUIEvent
 				timer = 0;
 			}
 			
-			GUI.Label(new Rect(hPos, vPos+vSize, hSize, cmdSize), ">", "Label");		
+			string header;
+			if(console.localConsole)
+			{
+				cmdOffset = cmdLocalOffset;
+				header = "local$ ";
+			}
+			else
+			{
+				cmdOffset = cmdAppOffset;
+				header = ">";
+			}
+			
+			GUI.Label(new Rect(hPos, vPos+vSize, hSize, cmdSize), header, "Label");		
 			inputCmd = GUI.TextField(new Rect(hPos + cmdOffset, vPos+vSize, hSize, cmdSize), inputCmd, "Label");			
 		}
 	}
@@ -297,46 +231,43 @@ public class GUIConsole : GUIEvent
 		maxLines = (int)(baseSize / lineHeight);
 		vSize = maxLines * lineHeight;
 		
-		consoleWait = consoleFreeze;
+		console.consoleWait = console.consoleFreeze;
 		
-		if(consoleFreeze == false && consoleOut.Count > 0)
+		if(console.consoleFreeze == false && consoleOut.Count > 0)
 		{
-			consoleWait = true;
+			console.consoleWait = true;
 			if(timer > waitTime)
 			{
 				bool hasInput;					
-				KeyValuePair<string, Commands> output = consoleOut.Dequeue();
+				KeyValuePair<string, ConsoleController.Commands> output = consoleOut.Dequeue();
 				
 				string text = output.Key;
-				Commands cmd = output.Value;
+				ConsoleController.Commands cmd = output.Value;
 				
 				hasInput = false;
-				foreach(char c in text.ToCharArray())
+				if(cmd != ConsoleController.Commands.Void)
+					hasInput = true;
+				else
 				{
-					if(char.IsWhiteSpace(c) != true)
-						hasInput = true;
-					
-				}
-				
-				
-				if(cmd != Commands.DontPrint)
-				{
-					if(hasInput)
-						consolePast.Add (text);
-								
-					if(cmd != Commands.Void)
+					foreach(char c in text.ToCharArray())
 					{
-						if(cmd == Commands._Check)
-						{
-
-							
-							if(hasInput)
-								activateCommand(validateCommand(text), text);
-						}
-						else
-							runCommand (cmd);
+						if(char.IsWhiteSpace(c) != true)
+							hasInput = true;
 					}
 				}
+				
+				if(hasInput)
+				{
+					if(cmd != ConsoleController.Commands.DontPrint)
+						consolePast.Add (text);
+						
+					Dictionary<string, ConsoleController.Commands> outputCmds;
+					outputCmds = console.giveCommand(cmd, text);
+					
+					foreach(KeyValuePair<string, ConsoleController.Commands> kvp in outputCmds)
+						EnterCommand(kvp.Key, kvp.Value);
+				}
+
 				
 				timer = 0;
 			}
@@ -348,38 +279,5 @@ public class GUIConsole : GUIEvent
 		displayConsole();
 			
 	}
-	
-		
-	private void runCommand(Commands cmd)
-	{
-		if(cmd == Commands.Activate)
-			consoleOn = true;
-		else if (cmd == Commands.Deactivate)
-			consoleOn = false;
-		//NETWORK ONLY COMMANDS
-		else if (cmd == Commands.Scan)
-		{
-			EnterCommand("You used the command Scan, but it had no effect! <this is a test string>", Commands.Void);
-			
-		}
-		//MIXED PURPOSE COMMANDS
-		else if (cmd == Commands.Exit)
-		{
-			if(localConsole)
-				Application.Quit();
-			else
-				localConsole = true;
-		}
-		//LOCAL ONLY COMMMANDS
-		else if (cmd == Commands.Dir)
-		{
-			EnterCommand("You used the command Dir, but it had no effect! <this is a test string>", Commands.Void);
-		}
-		else if (cmd == Commands.RunNet && localConsole)
-		{
-			if(localConsole)
-				localConsole = false;	
-		}
-		
-	}
+
 }
