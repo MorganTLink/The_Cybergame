@@ -1,0 +1,26 @@
+﻿
+# Please enter the commit message for your changes. Lines starting
+# with '#' will be ignored, and an empty message aborts the commit.
+# On branch master
+# Changes to be committed:
+#   (use "git reset HEAD <file>..." to unstage)
+#
+#	modified:   .gitignore
+#	modified:   Cyberspace Hacker Game/CyberspaceHacker/Assets/CyberspaceHacker Assets/Content/Barriers/Firewall_Closed.prefab
+#	renamed:    Cyberspace Hacker Game/CyberspaceHacker/Assets/CyberspaceHacker Assets/Materials/Nighttime Simple Water.mat -> Cyberspace Hacker Game/CyberspaceHacker/Assets/CyberspaceHacker Assets/Materials/Background Grid.mat
+#	modified:   Cyberspace Hacker Game/CyberspaceHacker/Assets/CyberspaceHacker Assets/Materials/CameraScreening.mat
+#	modified:   Cyberspace Hacker Game/CyberspaceHacker/Assets/CyberspaceHacker Assets/Models/Materials/lambert1.mat
+#	modified:   Cyberspace Hacker Game/CyberspaceHacker/Assets/CyberspaceHacker Test_Scene_1.unity
+#	modified:   Cyberspace Hacker Game/CyberspaceHacker/CyberspaceHacker-csharp.sln
+#	modified:   Cyberspace Hacker Game/CyberspaceHacker/CyberspaceHacker.sln
+#	modified:   Cyberspace Hacker Game/CyberspaceHacker/Library/InspectorExpandedItems.asset
+#	modified:   Cyberspace Hacker Game/CyberspaceHacker/Library/ScriptMapper
+#	modified:   Cyberspace Hacker Game/CyberspaceHacker/Library/assetDatabase3
+#	modified:   Cyberspace Hacker Game/CyberspaceHacker/Library/expandedItems
+#	modified:   Cyberspace Hacker Game/CyberspaceHacker/Library/guidmapper
+#	renamed:    Cyberspace Hacker Game/CyberspaceHacker/Library/metadata/c5/c55afdc4a8a3b4890b07cc7d176510bb -> Cyberspace Hacker Game/CyberspaceHacker/Library/metadata/12/1202b3ec894d2de489e078221a50b94c
+#	modified:   Cyberspace Hacker Game/CyberspaceHacker/Library/metadata/1b/1b20af20c448a414aae967bede7088c0
+#	modified:   Cyberspace Hacker Game/CyberspaceHacker/Library/metadata/60/60fb16895cbaf4946906b6d63f3653ec
+#	modified:   Cyberspace Hacker Game/CyberspaceHacker/Library/metadata/d3/d3991b3ec0094d4489cd05ae21bd30ff
+#
+
