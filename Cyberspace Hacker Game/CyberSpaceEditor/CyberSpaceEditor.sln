@@ -1,7 +1,7 @@
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2008
 
-Project("{7B262CED-7740-B3BB-450A-0246E826BDA4}") = "CyberspaceHacker", "Assembly-CSharp.csproj", "{E11394EB-BE5B-4865-7F04-947F6909F460}"
+Project("{C782E098-675F-43D9-ECEC-5CE04FDBC7B1}") = "CyberSpaceEditor", "Assembly-CSharp.csproj", "{68BEF306-3577-5067-7770-25264C0732EC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -9,15 +9,15 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{E11394EB-BE5B-4865-7F04-947F6909F460}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{E11394EB-BE5B-4865-7F04-947F6909F460}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{E11394EB-BE5B-4865-7F04-947F6909F460}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{E11394EB-BE5B-4865-7F04-947F6909F460}.Release|Any CPU.Build.0 = Release|Any CPU
+		{68BEF306-3577-5067-7770-25264C0732EC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{68BEF306-3577-5067-7770-25264C0732EC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{68BEF306-3577-5067-7770-25264C0732EC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{68BEF306-3577-5067-7770-25264C0732EC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
-																																																																																																																																																																																													GlobalSection(MonoDevelopProperties) = preSolution
+											GlobalSection(MonoDevelopProperties) = preSolution
 		StartupItem = Assembly-CSharp.csproj
 		Policies = $0
 		$0.TextStylePolicy = $1
