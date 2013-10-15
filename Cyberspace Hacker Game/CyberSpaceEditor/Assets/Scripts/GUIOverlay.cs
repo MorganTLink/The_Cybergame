@@ -15,12 +15,20 @@ public class GUIOverlay : MonoBehaviour {
 	
 	//renders GUI
 	void OnGUI(){
+		if(GUI.Button(new Rect(Camera.main.pixelWidth - 100,0,100,20),"export"))
+		{
+		}
+		
+		
 		if(_positionObjects)
 		{
 			if(GUI.Button(new Rect(0,0,100,20),"position objects"))
 			{
 				_positionObjects = false;
-				Debug.Log("botat");
+			}
+			else
+			{
+				this._sceneSelect();
 			}
 		}
 		else
@@ -28,7 +36,11 @@ public class GUIOverlay : MonoBehaviour {
 			if(GUI.Button(new Rect(0,0,100,20),"nodify"))
 			{
 				_positionObjects = true;
-				Debug.Log("botat");
+			}
+			else
+			{
+			
+				this._sceneSelect();
 			}
 		}
 		
@@ -36,8 +48,14 @@ public class GUIOverlay : MonoBehaviour {
 
 	}
 	
-	void Update()
+	private void _unSelectNodes()
 	{
+	}
+	
+	private void _sceneSelect()
+	{
+	
+		
 		if(Input.GetMouseButtonDown(0))
 		{
 
@@ -66,7 +84,6 @@ public class GUIOverlay : MonoBehaviour {
 							if(children.name == "X")
 							{
 								_selectedDirection = SelectedDirection.x;
-								Debug.Log("x");
 							}
 							else if(children.name == "Y")
 							{
@@ -82,29 +99,46 @@ public class GUIOverlay : MonoBehaviour {
 			}
 			else
 			{
+				
 				_selectedObjects.Clear();
 			}
 		}
+		else if(Input.GetMouseButtonUp(0))
+		{
+			//clear the nodes on selection mode with the mouse is released
+			if(_positionObjects)
+				_selectedObjects.Clear();
+			
+		}
 		
-		if(_positionObjects && _selectedObjects.Count > 0){
+		if(_positionObjects)
+		{
 			
-			
-			switch(_selectedDirection)
-			{
-				case SelectedDirection.x:
-				_selectedObjects[0].position = new Vector3(_startingObjectPosition.x - (Input.mousePosition.y - _startingMousePosition.y),_startingObjectPosition.y,_startingObjectPosition.z);
+			if(_selectedObjects.Count > 0){
 				
-					break;
-				case SelectedDirection.y:
-				_selectedObjects[0].position = new Vector3(_startingObjectPosition.x,_startingObjectPosition.y + (Input.mousePosition.y - _startingMousePosition.y),_startingObjectPosition.z);
-					break;
-				case SelectedDirection.z:
-				_selectedObjects[0].position = new Vector3(_startingObjectPosition.x,_startingObjectPosition.y,_startingObjectPosition.z + (Input.mousePosition.x- _startingMousePosition.x));
-					break;
+				
+				switch(_selectedDirection)
+				{
+					case SelectedDirection.x:
+					_selectedObjects[0].position = new Vector3(_startingObjectPosition.x - (Input.mousePosition.y - _startingMousePosition.y),_startingObjectPosition.y,_startingObjectPosition.z);
+					
+						break;
+					case SelectedDirection.y:
+					_selectedObjects[0].position = new Vector3(_startingObjectPosition.x,_startingObjectPosition.y + (Input.mousePosition.y - _startingMousePosition.y),_startingObjectPosition.z);
+						break;
+					case SelectedDirection.z:
+					_selectedObjects[0].position = new Vector3(_startingObjectPosition.x,_startingObjectPosition.y,_startingObjectPosition.z + (Input.mousePosition.x- _startingMousePosition.x));
+						break;
+				}
+			}
+		}
+		else{
+			if(_selectedObjects.Count >= 2){
 			}
 		}
 	
 		
 	}
+
 
 }
