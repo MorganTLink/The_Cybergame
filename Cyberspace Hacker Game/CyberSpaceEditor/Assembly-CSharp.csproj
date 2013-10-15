@@ -44,7 +44,8 @@
 	</Reference>
   </ItemGroup>
   <ItemGroup>
-     <Compile Include="Assets\GUIOverlay.cs" />
+     <Compile Include="Assets\Scripts\GUIOverlay.cs" />
+     <Compile Include="Assets\Scripts\NodeBehavior.cs" />
      <Compile Include="Assets\Scripts\RTSCamera.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
