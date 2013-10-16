@@ -26,10 +26,7 @@ public class GUIOverlay : MonoBehaviour {
 			{
 				_positionObjects = false;
 			}
-			else
-			{
-				this._sceneSelect();
-			}
+
 		}
 		else
 		{
@@ -37,86 +34,79 @@ public class GUIOverlay : MonoBehaviour {
 			{
 				_positionObjects = true;
 			}
-			else
-			{
-			
-				this._sceneSelect();
-			}
+				
 		}
 		
-
-
-	}
-	
-	private void _unSelectNodes()
-	{
-	}
-	
-	private void _sceneSelect()
-	{
-	
+		if(GUI.Button(new Rect(0,20,100,20),"Add Node"))
+		{
+			
+			Object lnode =Instantiate(Resources.Load("Prefab/Node"),new Vector3(0,0,0),new Quaternion(0,0,0,0));
+			lnode.name = "Node";
+		}
+		
 		
 		if(Input.GetMouseButtonDown(0))
 		{
-
 			Ray lcamerRay = Camera.main.ScreenPointToRay(Input.mousePosition);
 			RaycastHit lhitinfo;
-
+			
 			if(Physics.Raycast(lcamerRay,out lhitinfo,10000))
 			{
-					//game is set to position so only one object can be selected at a time
+				if(lhitinfo.transform.name == "Node")
+				{
 					if(_positionObjects)
-					_selectedObjects.Clear();
-				
-					if(lhitinfo.transform.name == "Node")
-					{
+						_unSelectNodes();
+					
+					// add node to list
+					_addSelectedNode(lhitinfo.transform);
 					
 					_startingMousePosition = Input.mousePosition;
-					
-					//add object to selected
-					_selectedObjects.Add(lhitinfo.transform);
 					_startingObjectPosition = new Vector3(lhitinfo.transform.position.x,lhitinfo.transform.position.y,lhitinfo.transform.position.z);
-	
-					foreach(Transform children in lhitinfo.transform)
+					
+					if(_positionObjects)
 					{
-						if(children.collider.Raycast(lcamerRay,out lhitinfo,10000))
+						foreach(Transform children in lhitinfo.transform)
 						{
-							if(children.name == "X")
+							if(children.collider.Raycast(lcamerRay,out lhitinfo,10000))
 							{
-								_selectedDirection = SelectedDirection.x;
-							}
-							else if(children.name == "Y")
-							{
-								_selectedDirection = SelectedDirection.y;
-							}
-							else if(children.name == "Z")
-							{
-								_selectedDirection = SelectedDirection.z;
+								
+								if(children.name == "X")
+								{
+									_selectedDirection = SelectedDirection.x;
+									break;
+								}
+								else if(children.name == "Y")
+								{
+									_selectedDirection = SelectedDirection.y;
+									break;
+								}
+								else if(children.name == "Z")
+								{
+									_selectedDirection = SelectedDirection.z;
+									break;
+								}
 							}
 						}
+
 					}
+				}
+				else
+				{
+					_unSelectNodes();
 				}
 			}
 			else
 			{
-				
-				_selectedObjects.Clear();
+				_unSelectNodes();
 			}
 		}
-		else if(Input.GetMouseButtonUp(0))
-		{
-			//clear the nodes on selection mode with the mouse is released
-			if(_positionObjects)
-				_selectedObjects.Clear();
-			
-		}
+
 		
 		if(_positionObjects)
 		{
 			
-			if(_selectedObjects.Count > 0){
-				
-				
+			if(_selectedObjects.Count > 0)
+			{
 				switch(_selectedDirection)
 				{
 					case SelectedDirection.x:
@@ -133,12 +123,40 @@ public class GUIOverlay : MonoBehaviour {
 			}
 		}
 		else{
-			if(_selectedObjects.Count >= 2){
+		}
+		
+
+
+	}
+	
+	private void _unSelectNodes()
+	{
+		for(int x = 0; x < _selectedObjects.Count; x++)
+		{
+			
+			((NodeBehavior)_selectedObjects[x].GetComponent("NodeBehavior")).ToggleNode();
+		}
+		_selectedObjects.Clear();
+	}
+	
+	private bool _addSelectedNode(Transform gm)
+	{
+		for(int x = 0; x < _selectedObjects.Count; x++)
+		{
+			if(_selectedObjects[x] == gm)
+			{
+				return false;
 			}
 		}
-	
-		
+		((NodeBehavior)gm.GetComponent("NodeBehavior")).ToggleNode();
+		_selectedObjects.Add(gm);
+		return true;
 	}
-
+	
 
 }
+
+
+
+
+
